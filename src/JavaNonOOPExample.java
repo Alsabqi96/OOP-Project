@@ -7,6 +7,14 @@ public class JavaNonOOPExample {
     public static void main(String[] args) {
         List<HashMap<String, Object>> schools = getSchools();
         System.out.println(schools);  // Display the entered information (optional)
+
+        // Retrieve specific marks and calculate average
+        System.out.println("Retrieve Marks for a Student in a Subject:");
+        retrieveMarksForStudentInSubject(schools);
+
+        System.out.println("Calculate Average Marks for a Student:");
+        calculateAverageMarksForStudent(schools);
+
         scanner.close();
     }
 
@@ -147,9 +155,79 @@ public class JavaNonOOPExample {
         }
         return marks;
     }
+
+    // Method to retrieve marks for a student in a specific subject
+    public static void retrieveMarksForStudentInSubject(List<HashMap<String, Object>> schools) {
+        System.out.println("Enter School Name: ");
+        String schoolName = scanner.nextLine();
+        System.out.println("Enter Student ID: ");
+        String studentId = scanner.nextLine();
+        System.out.println("Enter Subject Name: ");
+        String subjectName = scanner.nextLine();
+
+        for (HashMap<String, Object> school : schools) {
+            if (school.get("School Name").equals(schoolName)) {
+                List<HashMap<String, Object>> students = (List<HashMap<String, Object>>) school.get("Students");
+
+                for (HashMap<String, Object> student : students) {
+                    if (student.get("Student ID").equals(studentId)) {
+                        List<HashMap<String, Object>> subjects = (List<HashMap<String, Object>>) student.get("Subjects");
+
+                        for (HashMap<String, Object> subject : subjects) {
+                            if (subject.get("Subject Name").equals(subjectName)) {
+                                System.out.println("Marks Details: " + subject.get("Marks"));
+                                return;
+                            }
+                        }
+                        System.out.println("Subject not found.");
+                        return;
+                    }
+                }
+                System.out.println("Student not found.");
+                return;
+            }
+        }
+        System.out.println("School not found.");
+    }
+
+    // Method to calculate average marks for a student
+    public static void calculateAverageMarksForStudent(List<HashMap<String, Object>> schools) {
+        System.out.println("Enter School Name: ");
+        String schoolName = scanner.nextLine();
+        System.out.println("Enter Student ID: ");
+        String studentId = scanner.nextLine();
+
+        for (HashMap<String, Object> school : schools) {
+            if (school.get("School Name").equals(schoolName)) {
+                List<HashMap<String, Object>> students = (List<HashMap<String, Object>>) school.get("Students");
+
+                for (HashMap<String, Object> student : students) {
+                    if (student.get("Student ID").equals(studentId)) {
+                        List<HashMap<String, Object>> subjects = (List<HashMap<String, Object>>) student.get("Subjects");
+
+                        int totalMarks = 0;
+                        int subjectCount = 0;
+                        for (HashMap<String, Object> subject : subjects) {
+                            List<HashMap<String, Object>> marks = (List<HashMap<String, Object>>) subject.get("Marks");
+
+                            for (HashMap<String, Object> mark : marks) {
+                                totalMarks += (int) mark.get("Marks");
+                            }
+                            subjectCount += marks.size();
+                        }
+                        if (subjectCount > 0) {
+                            float averageMarks = (float) totalMarks / subjectCount;
+                            System.out.println("Average Marks: " + averageMarks);
+                        } else {
+                            System.out.println("No marks available for calculation.");
+                        }
+                        return;
+                    }
+                }
+                System.out.println("Student not found.");
+                return;
+            }
+        }
+        System.out.println("School not found.");
+    }
 }
-
-
-
-
-
